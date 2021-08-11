@@ -1,0 +1,6 @@
+{
+    "namesIn": ["ICOD", "ISpeCon", "ICaCO3", "IP", "ITKN", "ITDS", "ITSS", "IPAFInd"],
+    "namesUp": ["UCOD", "USpeCon", "UCaCO3", "UP", "UTKN", "UTDS", "UTSS", "UPAFInd"],
+    "namesOut": ["IDraAre", "ILongit", "ILatitu"],
+    "namesMisc": ["IRiffle", "IPool", "IChanne", "ISubstr", "ICover", "IRipari", "IGraMet"]
+}

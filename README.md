@@ -9,8 +9,14 @@ Preprocessing:
 2_linkingHydrosheds.R
 3_upstreamHydrosheds.R
 
+Calculation of correlations in dependence of distance:
+4_dist_cor.R
+
 Inference of graphical models:
-4_modelling.R
+5_modelling.R
 
 Evaluation of the models:
-5_evaluate.R
+6_evaluate.R
+
+Export of results:
+7_export_results.R

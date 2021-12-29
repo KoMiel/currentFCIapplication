@@ -11,48 +11,7 @@ setwd("../data/HydroRIVERS_v10_na_shp") #data directory
 hydrosheds <- read_sf(dsn = ".", layer = "HydroRIVERS_v10_na") #read hydrosheds
 setwd("..") #reset directory
 
-# read the data, name the columns consistently, only keep those that are interesting and convert to numeric
-datapoints_Fish <- as.data.frame(read_excel("Ohio_data_correction_April2017_stand.xlsx", sheet = "Fish")) # read measurement stations for fish
-datapoints_Fish <- datapoints_Fish[3:nrow(datapoints_Fish),] # drop first two rows (mean and sd)
-datapoints_Fish <- datapoints_Fish[,c("SYCode", "DraAre", "Latitu", "Longit", "Channe_C",
-                                      "Cover_C", "GraMet_C", "Pool_C", "Riffle_C", "Ripari_C", "Substr_C",
-                                      "COD", "SpeCon_median", "CaCO3_median", "P_median",
-                                      "TKN_median", "TDS", "TSS", "PAFInd_avg", "IBI")]
-
-names(datapoints_Fish) <- c("SYCode", "DraAre", "Latitu", "Longit", "Channe", "Cover", "GraMet", "Pool", "Riffle", "Ripari", "Substr", "COD", "SpeCon", "CaCO3", "P", "TKN", "TDS", "TSS", "PAFInd", "IBI")
-datapoints_Fish <- transform(datapoints_Fish,
-                             DraAre = as.numeric(DraAre),
-                             LatituTemp = as.numeric(Latitu), #temporary variable
-                             LongitTemp = as.numeric(Longit), #temporary variable
-                             Latitu = as.numeric(Latitu), 
-                             Longit = as.numeric(Longit),
-                             Channe = as.numeric(Channe),
-                             Cover = as.numeric(Cover),
-                             GraMet = as.numeric(GraMet),
-                             Pool = as.numeric(Pool),
-                             Riffle = as.numeric(Riffle),
-                             Ripari = as.numeric(Ripari),
-                             Substr = as.numeric(Substr),
-                             COD = as.numeric(COD),
-                             SpeCon = as.numeric(SpeCon),
-                             CaCO3 = as.numeric(CaCO3),
-                             P = as.numeric(P),
-                             TKN = as.numeric(TKN),
-                             TDS = as.numeric(TDS),
-                             TSS = as.numeric(TSS),
-                             PAFInd = as.numeric(PAFInd),
-                             IBI = as.numeric(IBI))
-
-datapoints_Inv <- as.data.frame(read_excel("Ohio_data_correction_April2017_stand.xlsx", sheet = "Invertebrates 1")) # read measurement stations for invertebrates
-names(datapoints_Inv) <- as.character(datapoints_Inv[3,]) # rename the columns
-datapoints_Inv <- datapoints_Inv[6:nrow(datapoints_Inv),3:ncol(datapoints_Inv)] #drop the uninformative rows and columns
-datapoints_Inv <- datapoints_Inv[,c("Site Code", "ICI")]
-names(datapoints_Inv) <- c("SYCode", "ICI")
-datapoints_Inv <- transform(datapoints_Inv, ICI = as.numeric(ICI))
-
-# combine fish and invertebrate tables
-datapoints <- merge(datapoints_Fish, datapoints_Inv, by = "SYCode", all = TRUE)
-data <- as.data.table(datapoints)
+data <- fread(file = 'ohio_freshwater.csv')
 
 # remove incomplete cases
 data <- na.omit(data, cols = c("SYCode", "DraAre", "LatituTemp", "LongitTemp", "Latitu", "Longit", "Channe", "Cover", "GraMet", "Pool", "Riffle", "Ripari", "Substr", "COD", "SpeCon", "CaCO3", "P", "TKN", "TDS", "TSS", "PAFInd"))
@@ -149,10 +108,10 @@ pb <- txtProgressBar(min = 1, max = nrow(datapoints)) # new progress bar
 for (i in 1:nrow(datapoints)) {
   
   setTxtProgressBar(pb, i)
-
+  
   segment <- datapoints$geometry[i]
   distances <- st_distance(hydrosheds_cropped$geometry, segment) # find distances to all segments
-
+  
   datapoints$segment[i] <- which.min(distances) # save all information
   datapoints$distance[i] <- min(distances)
   datapoints$volume[i] <- hydrosheds_cropped[which.min(distances),]$DIS_AV_CMS

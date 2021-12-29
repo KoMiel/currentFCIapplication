@@ -74,8 +74,7 @@ ft <- formattable(df,
                 "padding" = "5px",
                 "font.weight" = "bold",  
                 "text-align" = "left")),
-            area(col = 2:28) ~ color_tile("transparent", "lightblue"),
-            'Channel' = formatter("span", style = x ~ style("font.weight:20px"))) 
+            area(col = 2:28) ~ color_tile("transparent", "lightblue")) 
 
             )
 

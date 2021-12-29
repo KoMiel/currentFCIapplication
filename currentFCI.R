@@ -38,9 +38,21 @@ bootstrap <- function(data, nBoot, pBoot, alpha, test,
   
   # loop over runs of the bootstrapping
   res <- foreach(run = 1:nBoot) %dopar% {
+  
     # initialize empty dataset
     dataSet <- NULL
+
+    # generate a random seed and use it
+    seed <- runif(1, min = 0, max = 1000000)
+    set.seed(seed)
     
+    # save the random seed for reproducibility
+    randomSeed <- c(run, seed, '\n')
+    filename <- "models/seed.txt"
+    sink(file = filename, append = TRUE)
+    cat(randomSeed)
+    sink()
+
     # select random block
     samp <- sample(x = unique(data$block), size = 1)
     dataSet <- rbind(dataSet, data[data$block == samp,])
@@ -72,7 +84,7 @@ bootstrap <- function(data, nBoot, pBoot, alpha, test,
     Mat3 <- as.numeric(mat == 3)
     
     # save model in folder
-    toSave <- list(Mat1, Mat2, Mat3, dataSet)
+    toSave <- list(Mat1, Mat2, Mat3, dataSet, result)
     dir.create(filename)
     save(toSave, file = paste0(filename, run, '.rdata'))
     

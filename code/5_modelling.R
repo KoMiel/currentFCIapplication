@@ -234,5 +234,5 @@ invModel <- bootstrap(data = dataICI, nBoot = nModels, pBoot = 1, alpha = alpha,
                        doPdsep = TRUE, conservative = TRUE, m.max = 3, pdsep.max = 3, posBio = posBio)
 
 # save the model
-filename <- paste0('models/invNormFin.rdata')
+filename <- paste0('models/ICI.rdata')
 save(invModel, file = filename)

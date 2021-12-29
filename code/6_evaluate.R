@@ -3,7 +3,7 @@
 library(pcalg)
 
 # lower threshold for edges
-lim <- 60
+lim <- 65
 
 # number of models
 nModels <- 100

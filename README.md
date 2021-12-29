@@ -20,3 +20,9 @@ Evaluation of the models:
 
 Export of results:
 7_export_results.R
+
+Export of quartiles of conditional independence tests:
+8_quartiles.R
+
+Calculation of conflict rates>
+9_conflict_rates.R
